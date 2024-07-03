@@ -43,3 +43,9 @@
 ## 💡 Key Points
 - 유저 간 대기열을 요청 순서대로 정확하게 제공할 방법을 고민해 봅니다.
 - 동시에 여러 사용자가 예약 요청을 했을 때, 좌석이 중복으로 배정되지 않도록 합니다.
+
+![class-diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Hongmebuilding/hhp-server1/main/docs/domain.puml)
+
+![class-diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Hongmebuilding/hhp-server1/main/docs/usecase.puml)
+
+sequence-diagram 은 내용이 많아 image로 올리지 않아서 docs/sequence-diagram 을 참고하시길 바랍니다.
