@@ -1,0 +1,20 @@
+@startuml "Use Case Diagram"
+left to right direction
+actor "User" as user
+
+rectangle "Theater Reservation System" {
+  usecase "Authenticate" as UC1
+  usecase "Make Reservation" as UC2
+  usecase "Check Seat Availability" as UC3
+  usecase "Process Payment" as UC4
+  usecase "Confirm Reservation" as UC5
+}
+
+user --> UC1
+user --> UC2
+
+UC2 ..> UC3 : <<include>>
+UC2 ..> UC4 : <<include>>
+UC2 <.. UC5 : <<extend>>
+UC4 ..> UC1 : <<include>>
+@enduml

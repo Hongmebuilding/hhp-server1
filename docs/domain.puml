@@ -1,0 +1,114 @@
+@startuml
+
+package "User Domain" {
+  class User {
+    - id: Long
+    - username: String
+    - password: String
+    + authenticate(): boolean
+  }
+
+  class AuthService {
+    + createToken(user: User): String
+    + validateToken(token: String): boolean
+  }
+
+  class UserRepository {
+    + findByUsername(username: String): User
+  }
+}
+
+package "Reservation Domain" {
+  class Reservation {
+    - id: Long
+    - userId: Long
+    - seatId: Long
+    - date: Date
+    - status: ReservationStatus
+    + create(): boolean
+    + confirm(): void
+  }
+
+  class ReservationService {
+    + makeReservation(userId: Long, seatId: Long, date: Date): Reservation
+  }
+
+  class SeatService {
+    + checkAvailability(seatId: Long, date: Date): boolean
+    + reserveSeat(seatId: Long, date: Date): boolean
+  }
+
+  class ReservationRepository {
+    + save(reservation: Reservation): Reservation
+  }
+
+  class SeatRepository {
+    + findById(seatId: Long): Seat
+    + updateStatus(seatId: Long, status: SeatStatus): void
+  }
+
+  class QueueManager {
+      + getToken(): QueueToken
+      + checkTokenStatus(token: QueueToken): TokenStatus
+      + removeToken(token: QueueToken): void
+      + updateTokenStatus(token: QueueToken, status: TokenStatus): void
+  }
+
+  class QueueToken {
+      - id: Long
+      - userId: Long
+      - status: TokenStatus
+      - createdAt: DateTime
+  }
+
+  enum TokenStatus {
+      WAITING
+      ACTIVE
+      USED
+      EXPIRED
+  }
+
+  class QueueRepository {
+      + save(token: QueueToken): QueueToken
+      + findByUserId(userId: Long): QueueToken
+      + updateStatus(tokenId: Long, status: TokenStatus): void
+  }
+
+  ReservationService --> QueueManager : uses
+  QueueManager --> QueueRepository : uses
+}
+
+package "Payment Domain" {
+  class Payment {
+    - id: Long
+    - reservationId: Long
+    - amount: BigDecimal
+    - status: PaymentStatus
+    + process(): boolean
+  }
+
+  class PaymentService {
+    + processPayment(reservationId: Long, amount: BigDecimal): boolean
+  }
+
+  class PaymentRepository {
+    + save(payment: Payment): Payment
+  }
+
+  interface PaymentGateway {
+    + charge(amount: BigDecimal): boolean
+  }
+}
+
+User --> AuthService : uses
+AuthService --> UserRepository : uses
+ReservationService --> SeatService : uses
+ReservationService --> ReservationRepository : uses
+SeatService --> SeatRepository : uses
+ReservationService --> PaymentService : uses
+PaymentService --> PaymentRepository : uses
+PaymentService --> PaymentGateway : uses
+
+@enduml
+
+

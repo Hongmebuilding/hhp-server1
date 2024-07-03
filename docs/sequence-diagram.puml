@@ -1,0 +1,60 @@
+@startuml
+title 인증 (Authenticate)
+actor User
+participant "Theater Reservation System" as System
+database "User Database" as DB
+
+User -> System: 로그인 요청
+System -> DB: 사용자 정보 확인
+DB --> System: 사용자 정보 반환
+alt 인증 성공
+    System --> User: 로그인 성공
+else 인증 실패
+    System --> User: 로그인 실패
+end
+
+newpage 토큰을 이용한 대기열 시스템
+
+actor User
+participant "Theater Reservation System" as System
+participant "Queue Manager" as Queue
+participant "Seat Availability" as Seats
+participant "Payment Gateway" as Payment
+
+User -> System: 예약 페이지 접속
+System -> Queue: 대기열 상태 확인
+Queue --> System: 대기열 정보 반환
+alt 대기 필요
+    System --> User: 대기열 토큰 및 예상 대기 시간 제공
+    User -> System: 주기적으로 상태 확인
+    System -> Queue: 토큰 상태 확인
+    Queue --> System: 토큰 상태 반환
+else 대기 불필요
+    System --> User: 즉시 예약 페이지 접근 허용
+end
+
+newpage 예약 생성
+
+actor User
+participant "Theater Reservation System" as System
+participant "Seat Availability" as Seats
+participant "Payment Gateway" as Payment
+
+User -> System: 예약 요청
+System -> Seats: 좌석 가용성 확인
+Seats --> System: 가용 좌석 정보 반환
+System --> User: 가용 좌석 표시
+User -> System: 좌석 선택
+System -> Payment: 결제 처리 요청
+Payment --> System: 결제 결과 반환
+alt 결제 성공
+    System -> System: 예약 확정
+    System -> Queue: 사용된 토큰 제거
+    System --> User: 예약 확인 정보 전송
+else 결제 실패
+    System --> User: 결제 실패 알림
+    System -> Queue: 토큰 상태 업데이트 (재사용 가능)
+end
+
+
+@enduml
