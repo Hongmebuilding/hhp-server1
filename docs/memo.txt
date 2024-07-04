@@ -1,0 +1,80 @@
+// 사용자 테이블
+Table users {
+  id integer [primary key]
+  username varchar
+  password varchar
+  email varchar
+  balance integer
+  created_at timestamp
+}
+
+// 콘서트 테이블
+Table concerts {
+  id integer [primary key]
+  name varchar
+  date date
+  total_seats integer
+  available_seats integer
+}
+
+// 좌석 테이블
+Table seats {
+  id integer [primary key]
+  concert_id integer
+  seat_number integer
+  status enum // 'available', 'reserved', 'occupied'
+  price integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+// 예약 테이블
+Table reservations {
+  id integer [primary key]
+  user_id integer
+  seat_id integer
+  status enum // 'pending', 'confirmed', 'cancelled'
+  created_at timestamp
+  updated_at timestamp
+}
+
+// 결제 테이블
+Table payments {
+  id integer [primary key]
+  reservation_id integer
+  user_id integer
+  amount integer
+  status enum // 'success', 'failed', 'pending'
+  created_at timestamp
+  updated_at timestamp
+}
+
+// 토큰 테이블
+Table tokens {
+  id integer [primary key]
+  user_id integer
+  token varchar [unique]
+  created_at timestamp
+  expires_at timestamp
+}
+
+// 대기열 테이블
+Table queue {
+  id integer [primary key]
+  user_id integer
+  concert_id integer
+  seq integer
+  status enum // 'waiting', 'proceeding', 'completed'
+  created_at timestamp
+  updated_at timestamp
+}
+
+// 관계 정의
+Ref: seats.concert_id > concerts.id
+Ref: reservations.user_id > users.id
+Ref: reservations.seat_id > seats.id
+Ref: payments.reservation_id > reservations.id
+Ref: payments.user_id > users.id
+Ref: tokens.user_id > users.id
+Ref: queue.user_id > users.id
+Ref: queue.concert_id > concerts.id

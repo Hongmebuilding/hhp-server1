@@ -48,4 +48,7 @@
 
 ![class-diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Hongmebuilding/hhp-server1/main/docs/usecase.puml)
 
+
 sequence-diagram 은 내용이 많아 image로 올리지 않아서 docs/sequence-diagram 을 참고하시길 바랍니다.
+
+![img.png](img.png)

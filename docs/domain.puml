@@ -63,9 +63,8 @@ package "Reservation Domain" {
 
   enum TokenStatus {
       WAITING
-      ACTIVE
-      USED
-      EXPIRED
+      PROCEEDING
+      COMPLETE
   }
 
   class QueueRepository {
